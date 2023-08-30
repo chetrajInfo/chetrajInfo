@@ -1,0 +1,4 @@
+
+
+This following link is for https://start.spring.io/; project for this library management system.
+https://start.spring.io/#!type=maven-project&language=java&platformVersion=2.7.15&packaging=jar&jvmVersion=1.8&groupId=com.library.management&artifactId=library-management-system&name=Library%20Management%20System&description=A%20system%20for%20managing%20books%20and%20members%20in%20a%20library&packageName=com.library.management.system&dependencies=devtools,lombok,web,security,oauth2-resource-server,data-jpa,h2,mysql
