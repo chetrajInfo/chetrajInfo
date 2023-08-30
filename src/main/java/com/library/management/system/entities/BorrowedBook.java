@@ -21,6 +21,7 @@ public class BorrowedBook {
     @JoinColumn(name="member_id")
     private Member member;
 
+
     @Column(name="book_name")
     private String bookName;
 

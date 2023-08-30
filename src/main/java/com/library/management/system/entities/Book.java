@@ -15,9 +15,10 @@ import java.util.Date;
 @Table(name="book")
 public class Book {
 
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private long id;
+    private long book_id;
     //ISBN, title, author, publication date, status (available, borrowed, in maintenance), and genre.
 
     @NotNull
@@ -46,5 +47,6 @@ public class Book {
     @Column(name="genre")
     private String genre;
 
+    public Book(){ }
 
 }

@@ -21,9 +21,9 @@ public class Member {
     private String name;
 
 
-    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    @Column(name="borrowed_book")
-    private List<BorrowedBook> borrowed_book;
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BorrowedBook> borrowed_books;
+
 
     @Column(name="expiry_date")
     private Date expiry_date;

@@ -1,0 +1,179 @@
+
+Error:1
+_______________________________________________________
+package com.library.management.system.entities;
+
+import com.sun.istack.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@Table(name="book")
+public class Book {
+
+
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    private long id;
+    //ISBN, title, author, publication date, status (available, borrowed, in maintenance), and genre.
+
+    @NotNull
+    @Column(name="isbn")
+    private String isbn;
+
+    @NotNull
+    @Column(name="title")
+
+    private String title;
+
+    @NotNull
+    @Column(name="author")
+    private String author;
+
+    @NotNull
+    @Column(name="publication_date")
+    private Date publication_date;
+
+    @NotNull
+    @Column(name="status")
+    @Enumerated(EnumType.STRING)
+    private BookStatus status;
+
+
+    @Column(name="genre")
+    private String genre;
+
+}
+
+package com.library.management.system.entities;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Date;
+
+@Entity
+@Getter
+@Setter
+@Table(name= "borrowedbook")
+public class BorrowedBook {
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private Member member;
+
+    @Column(name="book_name")
+    private String bookName;
+
+    @Column(name="borrowed_date")
+    private Date borrowedDate;
+}
+
+
+
+package com.library.management.system.entities;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+
+@Entity
+@Getter
+@Setter
+@Table(name="member")
+public class Member {
+    //member ID, name, list of borrowed books, and membership expiry date.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long member_id;
+
+    @Column(name = "name")
+    private String name;
+
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name="borrowed_book")
+    private List<BorrowedBook> borrowed_book;
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BorrowedBook> borrowed_books;
+
+
+    @Column(name="expiry_date")
+    private Date expiry_date;
+
+}
+
+>mvn clean intall
+
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 2.748 s <<< FAILURE! - in com.library.management.system.LibraryManagementSystemApplicationTests
+[ERROR] contextLoads  Time elapsed: 0.003 s  <<< ERROR!
+java.lang.IllegalStateException: Failed to load ApplicationContext
+Caused by: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'entityManagerFactory' defined in class path resource [org/springframework/boot/autoc
+onfigure/orm/jpa/HibernateJpaConfiguration.class]: Invocation of init method failed; nested exception is org.hibernate.AnnotationException: @Column(s) not allowed on a @OneToOne property: com.library.management.system.entities.Member.borrowed_book
+Caused by: org.hibernate.AnnotationException: @Column(s) not allowed on a @OneToOne property: com.library.management.system.entities.Member.borrowed_book
+
+[INFO]
+[INFO] Results:
+[INFO]
+[ERROR] Errors:
+[ERROR]   LibraryManagementSystemApplicationTests.contextLoads » IllegalState Failed to ...
+[INFO]
+[ERROR] Tests run: 1, Failures: 0, Errors: 1, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  8.270 s
+[INFO] Finished at: 2023-08-29T22:56:22-05:00
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-surefire-plugin:2.22.2:test (default-test) on project library-management-system: There are test failures.
+[ERROR]
+[ERROR] Please refer to C:\Users\chetb\IntelliJ_Project\library-management-system\target\surefire-reports for the individual test results.
+[ERROR] Please refer to dump files (if any exist) [date].dump, [date]-jvmRun[N].dump and [date].dumpstream.
+[ERROR] -> [Help 1]
+[ERROR]
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR]
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+
+
+
+Solution:
+The error was causing because of onetoone and manytoone mapping since we used lazy fetch in BorrowedBook entity with manytoone
+ mapping and and in member entity we use onetoone this was causing error because if you use fetch lazy than have to use manytoone
+ mapping reationship and also you are not allowed to used @Column annotation if you are using mapping relationship in the attribute
+ so always delete that part. Never forget to make default empty constructor for the class.
+
+ BorrowedBook.class
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="member_id")
+    private Member member;
+
+Member.class
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)//instead of @OneToOne replace by @ManyToOne mapping
+    @Column(name="borrowed_book") //delete this part
+    private List<BorrowedBook> borrowed_book;
+
+
+Error:2
+________________________________________________
+
