@@ -173,6 +173,9 @@ Member.class
     @Column(name="borrowed_book") //delete this part
     private List<BorrowedBook> borrowed_book;
 
+In case If you want to use onetoone the make modification in BorrowedBook.class as
+@OneToOne(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+private BorrowedBook borrowedBook;
 
 Error:2
 ________________________________________________

@@ -1,6 +1,6 @@
 package com.library.management.system.entities;
 
-import com.sun.istack.NotNull;
+import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
