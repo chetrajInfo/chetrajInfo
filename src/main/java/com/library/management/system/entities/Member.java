@@ -20,6 +20,8 @@ public class Member {
     @Column(name = "name")
     private String name;
 
+    @Column(name="phone")
+    private String phone;
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BorrowedBook> borrowed_books;

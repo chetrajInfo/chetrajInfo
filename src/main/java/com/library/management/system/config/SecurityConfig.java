@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 //if you don't use this securityconfig because of Spring Security it will not allow the h2-console to run in the localhost
 //when you run the server in webpage using url http://localhost:8080/h2-console/ it will throw whitespace error status 402 forbidden
-//after permitAll() for the path for /h2-console now it will allow h2 databse to run in the web host
+//after permitAll() for the path for /h2-console now it will allow h2 database to run in the web host
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
