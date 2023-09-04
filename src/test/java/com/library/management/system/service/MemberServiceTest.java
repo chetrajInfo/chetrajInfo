@@ -4,6 +4,8 @@ import com.library.management.system.dao.MemberRepository;
 import com.library.management.system.entities.Member;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -62,10 +64,32 @@ class MemberServiceTest {
 
         // Optional: Check if the correct field has a violation
         ConstraintViolation<Member> violation = violations.iterator().next();
-        //assertEquals("phone", violation.getPropertyPath().toString());
+        //assertEquals("phone", violation.getPropertyPath().toString()); //this will check whether the field of phone is spell phone or not in Member entity
         assertEquals("Invalid Phone Number Format.", violation.getMessage());
 
     }
+
+    //JUnit 5 provides @ParameterizedTest to run a test multiple times with different arguments.
+    //It works in combination with one of the source annotations to provide input values for a single test.
+    @ParameterizedTest
+    @ValueSource(strings = { "8326468889", "83264688890", " ", "", "12345", "83264688A9" })
+    void testAddMemberForPhoneValidation(String phoneNumber) {
+        Member member = new Member(1L,"John Doe", phoneNumber, new ArrayList<>(), LocalDate.now());
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<Member>> violations = validator.validate(member);
+
+        assertFalse(violations.isEmpty());
+
+        // Optional: Check if the correct field has a violation
+        ConstraintViolation<Member> violation = violations.iterator().next();
+        System.out.println(violation.getMessage());
+    }
+   //When you run the above test it will throw first argument failed because it did not violate and assertFalse is in check which is expecting false
+    //however it is true because it is not breaking any rule but for all other 5 argument run passed because all of them have somehow
+    // breaks the rule and did violation.
 
 
     @Test
