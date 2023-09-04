@@ -49,13 +49,19 @@ public class MemberController {
     public Member getMemberByPhone(@PathVariable String phone){
         return memberService.findByPhone(phone);
     }
+
+
     @PutMapping("/phone/{phone}")
     public Member updateMemberByPhone(@PathVariable String phone, @Valid @RequestBody Member member){
         return memberService.updateUsingPhone(phone, member);
     }
+
+
     @DeleteMapping("/phone/{phone}")
     public ResponseEntity<Void> deleteMemberByPhone(@PathVariable String phone){
         memberService.deleteByPhone(phone);
         return ResponseEntity.ok().build();
     }
+
+
 }

@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### this will ignore log file to upload in the github
+logs/
